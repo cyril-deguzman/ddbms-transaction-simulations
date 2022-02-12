@@ -1,5 +1,5 @@
 {
-  "name": "MCO2",
+  "name": "mco2",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
@@ -13,6 +13,6 @@
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "hbs": "^4.2.0",
-    "mysql": "^2.18.1"
+    "mysql2": "^2.3.3"
   }
 }
