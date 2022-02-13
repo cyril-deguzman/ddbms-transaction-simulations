@@ -1,4 +1,5 @@
 const db = require(`../models/db.js`)
+const ReplicateController = require(`./ReplicateController.js`)
 const RecoveryController = require(`./RecoveryController.js`)
 
 const IndexController = {
@@ -22,9 +23,40 @@ const IndexController = {
    * @param {*} res 
    */
   getQuery: (req, res) => {
-    const query = `SELECT `
+    const query = ` ` +
+                  ` ` +
+                  ` ` +
+                  ` ` +
+                  ` `
 
     db.query()
+  },
+
+  /**
+   * postInsertMovie
+   * 
+   * inserts a movie to the database
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postInsertMovie: (req, res) => {
+    const {
+      name,
+      year
+    } = req.body
+
+    const query = `SET autocommit = 0;`+
+                  `START TRANSACTION;` +
+                  `INSERT INTO movies ("name", "year")` +
+                  `VALUES (${name}, ${year});` +
+                  `COMMIT;`
+
+    db.query(query, (result) => {
+      if(result)
+        ReplicateController.replicate(result);
+      else
+        RecoveryController.debug();
+    })
   },
 
   /**
