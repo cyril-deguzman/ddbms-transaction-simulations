@@ -59,19 +59,28 @@
 					</div>
 				</div>
 
-				<!-- Dropdown to select isolation level -->
-				<div>
-					<label for="isolation-type" class="form-label">Isolation Level</label>
-					<select
-						class="form-select form-select-sm"
-						aria-label=".form-select-sm example"
-						name="isolation-type"
-					>
-						<option value="uncommited">Read Uncommited</option>
-						<option value="committed">Read Committed</option>
-						<option value="repeatable">Read Repeatable</option>
-						<option value="serializable">Serializable</option>
-					</select>
+				<!-- Select isolation level -->
+				<div class="direction-row">
+					<form>
+						<label for="isolation-type" class="form-label">Isolation Level</label>
+						<select
+							class="form-select form-select-sm"
+							aria-label=".form-select-sm example"
+							name="isolation-type"
+						>
+							<option value="uncommited">Read Uncommited</option>
+							<option value="committed">Read Committed</option>
+							<option value="repeatable">Read Repeatable</option>
+							<option value="serializable">Serializable</option>
+						</select>
+						<button
+							id="set-isolation-type"
+							type="button"
+							class="btn btn-primary btn-sm"
+							>
+							<i class="fa-solid fa-check"></i>
+						</button>
+					</form>
 				</div>
 			</div>
 
@@ -118,7 +127,7 @@
 										<form>
 											<div class="mb-3 row">
 												<label
-													for="static-movieid"
+													for="insert-id"
 													class="col-sm-3 col-form-label"
 													>Movie ID</label
 												>
@@ -128,26 +137,28 @@
 														type="text"
 														readonly
 														class="form-control-plaintext"
-														id="static-movieid"
+														name="insert-id"
+														id="add-movieid"
 														value="2"
 													/>
 												</div>
 											</div>
 											<div class="mb-3 row">
-												<label for="input-name" class="col-sm-3 col-form-label"
+												<label for="insert-name" class="col-sm-3 col-form-label"
 													>Name</label
 												>
 												<div class="col-sm-9">
 													<!-- INPUT VALUE OF MOVIE NAME HERE -->
 													<input
 														class="form-control"
-														id="input-name"
+														name="insert-name"
+														id="insert-name"
 														placeholder="Spirited Away"
 													/>
 												</div>
 											</div>
 											<div class="mb-3 row">
-												<label for="input-year" class="col-sm-3 col-form-label"
+												<label for="insert-year" class="col-sm-3 col-form-label"
 													>Year</label
 												>
 												<div class="col-sm-9">
@@ -155,7 +166,8 @@
 													<input
 														type="number"
 														class="form-control"
-														id="input-year"
+														name="insert-year"
+														id="insert-year"
 														placeholder="2001"
 													/>
 												</div>
@@ -242,7 +254,7 @@
 													<form>
 														<div class="mb-3 row">
 															<label
-																for="static-movieid"
+																for="update-id"
 																class="col-sm-3 col-form-label"
 																>Movie ID</label
 															>
@@ -251,14 +263,15 @@
 																	type="text"
 																	readonly
 																	class="form-control-plaintext"
-																	id="static-movieid"
+																	name="update-id"
+																	id="update-id"
 																	value="1"
 																/>
 															</div>
 														</div>
 														<div class="mb-3 row">
 															<label
-																for="edit-name"
+																for="update-name"
 																class="col-sm-3 col-form-label"
 																>Name</label
 															>
@@ -266,14 +279,15 @@
 																<!-- INPUT VALUE OF MOVIE NAME HERE -->
 																<input
 																	class="form-control"
-																	id="edit-name"
+																	name="update-name"
+																	id="update-name"
 																	value="Nausicaä of the Valley of the Wind"
 																/>
 															</div>
 														</div>
 														<div class="mb-3 row">
 															<label
-																for="edit-year"
+																for="update-year"
 																class="col-sm-3 col-form-label"
 																>Year</label
 															>
@@ -282,7 +296,8 @@
 																<input
 																	type="number"
 																	class="form-control"
-																	id="edit-year"
+																	name="update-year"
+																	id="update-year"
 																	value="1984"
 																/>
 															</div>
@@ -357,6 +372,7 @@
 														Cancel
 													</button>
 													<button
+														id="delete-movie"
 														type="button"
 														class="btn btn-primary"
 														data-bs-dismiss="modal"
