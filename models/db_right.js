@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-const db = {
+const db_right = {
   connection: null,
 
   /* Connects to a locally hosted MYSQL database */
@@ -15,14 +15,12 @@ const db = {
     this.connection.connect(function(err){
       if(err) throw err;
       console.log("connected to mysql central node uwu! ina mo ethel");
-      db.autoCommit((result) => {})
     })
   },
 
   query: (sql, callback) => {
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
-      console.log("Result: ", result);
       return callback(result);
     })
   },
@@ -55,4 +53,4 @@ const db = {
   }
 }
 
-module.exports = db;
+module.exports = db_right;

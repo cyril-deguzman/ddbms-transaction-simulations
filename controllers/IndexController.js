@@ -1,4 +1,5 @@
 const db = require(`../models/db.js`)
+const ReplicateController = require(`./ReplicateController.js`)
 const RecoveryController = require(`./RecoveryController.js`)
 
 const IndexController = {
@@ -22,9 +23,73 @@ const IndexController = {
    * @param {*} res 
    */
   getQuery: (req, res) => {
-    const query = `SELECT `
+    const query = ` ` +
+                  ` ` +
+                  ` ` +
+                  ` ` +
+                  ` `
 
     db.query()
+  },
+
+  /**
+   * postAddMovie
+   * 
+   * inserts a movie into the database
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postAddMovie: (req, res) => {
+    const {
+      name,
+      year
+    } = req.body
+
+    const query = "INSERT INTO movies (`name`, `year`) " +
+                  `VALUES ("${name}", ${year}); `
+
+    db.startTransaction((result) => {
+      db.query(query, (row) => {
+        db.commit((result) => {
+          if(row)
+            ReplicateController.replicate(name, year);
+          else
+            RecoveryController.debug("insert", name, year);
+          res.send(result);
+        })
+      })
+    })
+
+  },
+
+  /**
+   * postDeleteMovie
+   * 
+   * deletes a movie from the database.
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postDeleteMovie: (req, res) => {
+    const {
+      name,
+      year
+    } = req.body
+
+    const query = "DELETE FROM movies " +
+                  `WHERE movies.name = '${name} AND movies.year = '${year}'`
+
+    db.startTransaction((result) => {
+      db.query(query, (row) => {
+        db.commit((result) => {
+          if(row)
+            ReplicateController.replicate(name, year);
+          else
+            RecoveryController.debug("delete", name, year);
+          res.send(result);
+        })
+      })
+    })
+
   },
 
   /**
