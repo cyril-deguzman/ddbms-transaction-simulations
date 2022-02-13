@@ -45,18 +45,6 @@
 							</button>
 						</form>
 					</div>
-					<!-- Dropdown to search either by Name or Year -->
-					<div>
-						<label for="search-type" class="form-label">Search movies by</label>
-						<select
-							class="form-select form-select-sm"
-							aria-label=".form-select-sm example"
-							name="search-type"
-						>
-							<option value="by-name">Name</option>
-							<option value="by-year">Year</option>
-						</select>
-					</div>
 				</div>
 
 				<!-- Select isolation level -->
@@ -85,7 +73,7 @@
 			</div>
 
 			<!-- CENTER SECTION -->
-			<div class="section">
+			<div class="section marg-top">
 				<div class="space-in-between">
 					<div>
 						<h2>Results</h2>
@@ -236,6 +224,22 @@
 													<form>
 														<div class="mb-3 row">
 															<label
+																for="update-id"
+																class="col-sm-3 col-form-label"
+																>ID</label
+															>
+															<div class="col-sm-9">
+																<!-- INPUT VALUE OF MOVIE ID HERE -->
+																<input
+																	class="form-control"
+																	name="update-id"
+																	id="update-id"
+																	value="1"
+																readonly>
+															</div>
+														</div>
+														<div class="mb-3 row">
+															<label
 																for="update-name"
 																class="col-sm-3 col-form-label"
 																>Name</label
@@ -259,12 +263,11 @@
 															<div class="col-sm-9">
 																<!-- INPUT VALUE OF MOVIE YEAR HERE -->
 																<input
-																	type="number"
 																	class="form-control"
 																	name="update-year"
 																	id="update-year"
 																	value="1984"
-																/>
+																	readonly>
 															</div>
 														</div>
 													</form>
@@ -392,7 +395,7 @@
 								<div class="modal-body">
 									<ul class="list-group">
 										<li class="list-group-item">
-											Edited movie ID 1, Nausicaä of the Valley of the Wind
+											Edited movie ID 1 into Nausicaä of the Valley of the Wind
 											(1984)
 										</li>
 										<li class="list-group-item">
