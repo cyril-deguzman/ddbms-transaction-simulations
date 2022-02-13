@@ -7,6 +7,8 @@ const bodyParser = require(`body-parser`)
 /* import local dependencies */
 const routes = require(`./routes/routes.js`)
 const db = require(`./models/db.js`)
+const db = require(`./models/db.js`)
+const db = require(`./models/db.js`)
 
 const app = express()
 

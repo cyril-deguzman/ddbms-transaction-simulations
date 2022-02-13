@@ -33,30 +33,33 @@ const IndexController = {
   },
 
   /**
-   * postInsertMovie
+   * postAddMovie
    * 
-   * inserts a movie to the database
+   * inserts a movie into the database
    * @param {*} req 
    * @param {*} res 
    */
-  postInsertMovie: (req, res) => {
+  postAddMovie: (req, res) => {
     const {
       name,
       year
     } = req.body
 
-    const query = `SET autocommit = 0;`+
-                  `START TRANSACTION;` +
-                  `INSERT INTO movies ("name", "year")` +
-                  `VALUES (${name}, ${year});` +
-                  `COMMIT;`
+    let query = "INSERT INTO movies (`name`, `year`) " +
+                `VALUES ("${name}", ${year}); `
 
-    db.query(query, (result) => {
-      if(result)
-        ReplicateController.replicate(result);
-      else
-        RecoveryController.debug();
+    db.startTransaction((result) => {
+      db.query(query, (row) => {
+        db.commit((result) => {
+          if(row)
+            ReplicateController.replicate(name, year);
+          else
+            RecoveryController.debug('insert', name, year);
+          res.send(result);
+        })
+      })
     })
+
   },
 
   /**
