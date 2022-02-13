@@ -32,6 +32,26 @@ const IndexController = {
     db.query()
   },
 
+  getMovie: (req, res) => {
+    const {name} = req.query;
+
+    const query = `SELECT * FROM movies ` +
+                  'WHERE `name` = "' + name + '";'
+
+    db.startTransaction((result) => {
+      db.query(query, (err, row) => {
+        db.commit((result) => {
+          if(row)
+            res.send(result[0]);
+          else {
+            RecoveryController.debug("read", name, 0);
+            res.send(err);
+          }
+        })
+      })
+    })
+  },
+
   /**
    * postAddMovie
    * 
@@ -76,15 +96,47 @@ const IndexController = {
     } = req.body
 
     const query = "DELETE FROM movies " +
-                  `WHERE movies.name = '${name} AND movies.year = '${year}'`
+                  `WHERE movies.name = '${name}' AND movies.year = '${year}'`
 
     db.startTransaction((result) => {
       db.query(query, (row) => {
         db.commit((result) => {
           if(row)
-            ReplicateController.replicate(name, year);
+            ReplicateController.delete(name, year);
           else
             RecoveryController.debug("delete", name, year);
+          res.send(result);
+        })
+      })
+    })
+
+  },
+
+  /**
+   * postUpdateMovie
+   * 
+   * updates a fucking movie. uwu.
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postUpdateMovie: (req, res) => {
+    const {
+      id,
+      name,
+      year
+    } = req.body
+
+    const query = `UPDATE movies ` +
+                  `SET movies.name = "${name}", movies.year = ${year} ` +
+                  `WHERE id = ${id}`
+
+    db.startTransaction((result) => {
+      db.query(query, (row) => {
+        db.commit((result) => {
+          if(row)
+            ReplicateController.update(id, name, year);
+          else
+            RecoveryController.debug("update", name, year);
           res.send(result);
         })
       })

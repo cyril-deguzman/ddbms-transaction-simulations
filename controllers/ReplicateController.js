@@ -17,7 +17,18 @@ const ReplicateController = {
 
   delete: (name, year) => {
     const query = "DELETE FROM movies " +
-                  `WHERE movies.name = '${name} AND movies.year = '${year}'`
+                  `WHERE movies.name = '${name}' AND movies.year = '${year}'`
+    
+    if(year < 1980)
+      db_left.query(query, () => {});
+    else
+      db_right.query(query, () => {});
+  },
+
+  update: (id, name, year) => {
+    const query = `UPDATE movies ` +
+                  `SET movies.name = "${name}", movies.year = ${year} ` +
+                  `WHERE id = ${id}`
     
     if(year < 1980)
       db_left.query(query, () => {});
