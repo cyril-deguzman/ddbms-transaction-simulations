@@ -45,8 +45,8 @@ const IndexController = {
       year
     } = req.body
 
-    let query = "INSERT INTO movies (`name`, `year`) " +
-                `VALUES ("${name}", ${year}); `
+    const query = "INSERT INTO movies (`name`, `year`) " +
+                  `VALUES ("${name}", ${year}); `
 
     db.startTransaction((result) => {
       db.query(query, (row) => {
@@ -54,7 +54,37 @@ const IndexController = {
           if(row)
             ReplicateController.replicate(name, year);
           else
-            RecoveryController.debug('insert', name, year);
+            RecoveryController.debug("insert", name, year);
+          res.send(result);
+        })
+      })
+    })
+
+  },
+
+  /**
+   * postDeleteMovie
+   * 
+   * deletes a movie from the database.
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postDeleteMovie: (req, res) => {
+    const {
+      name,
+      year
+    } = req.body
+
+    const query = "DELETE FROM movies " +
+                  `WHERE movies.name = '${name} AND movies.year = '${year}'`
+
+    db.startTransaction((result) => {
+      db.query(query, (row) => {
+        db.commit((result) => {
+          if(row)
+            ReplicateController.replicate(name, year);
+          else
+            RecoveryController.debug("delete", name, year);
           res.send(result);
         })
       })
