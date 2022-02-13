@@ -11,10 +11,6 @@ body {
 	justify-content: space-between;
 }
 
-h1 {
-	margin-bottom: 5%;
-}
-
 .justify-div {
 	justify-content: flex-end;
 }
@@ -27,6 +23,10 @@ h1 {
 .form-select {
 	display: inline;
 	width: auto;
+}
+
+.marg-top {
+	margin-top: 5%;
 }
 
 .operation {
