@@ -1,0 +1,49 @@
+body {
+	padding: 5%;
+}
+
+.section {
+	margin-top: 2%;
+}
+
+.space-in-between {
+	display: flex;
+	justify-content: space-between;
+}
+
+h1 {
+	margin-bottom: 5%;
+}
+
+.justify-div {
+	justify-content: flex-end;
+}
+
+.form-control {
+	display: inline;
+	width: auto;
+}
+
+.form-select {
+	display: inline;
+	width: auto;
+}
+
+.operation {
+	border: none;
+	background-color: #6c757d;
+	border-radius: 10%;
+	color: white;
+}
+
+.operation:hover {
+	background-color: #0d6efd;
+}
+
+.icon {
+	width: 20px;
+}
+
+ul {
+	text-align: left;
+}
