@@ -163,7 +163,7 @@ const IndexController = {
     
     switch(isoLvl) {
       case '1': isoLvl="Read Uncommitted"; break;
-      case '2': isoLvl="Read Commited"; break;
+      case '2': isoLvl="Read Committed"; break;
       case '3': isoLvl="Repeatable Read"; break;
       case '4': isoLvl="Serializable"; break;
     }
