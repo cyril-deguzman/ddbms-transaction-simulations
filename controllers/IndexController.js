@@ -43,7 +43,7 @@ const IndexController = {
     const {name} = req.query;
     console.log(name);
     const query = `SELECT * FROM movies ` +
-                  'WHERE `name` = "' + name + '";'
+                  "WHERE `name` = '" + name + "';"
 
     db.startTransaction((result) => {
       db.query(query, (err, row) => {
