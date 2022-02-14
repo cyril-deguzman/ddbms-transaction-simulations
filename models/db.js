@@ -54,7 +54,7 @@ const db = {
     })
   },
 
-  rollback: () => {
+  rollback: (callback) => {
     const query = `ROLLBACK;`
     this.connection.query(query, (err, result) => {
       if (err) throw err;
