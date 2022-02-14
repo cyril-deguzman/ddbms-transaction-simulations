@@ -37,9 +37,11 @@
 								type="search"
 								placeholder="Search"
 								aria-label="Search"
+                id="search-input"
+                name="search-input"
 							/>
 							<button
-								id="search-keyword"
+								id="search-btn"
 								class="btn btn-outline-success my-2"
 								type="submit"
 							>
@@ -187,9 +189,9 @@
 						</thead>
 						<tbody>
 							<tr>
-								<th scope="row">1</th>
-								<td>Nausicaä of the Valley of the Wind</td>
-								<td>1984</td>
+								<th scope="row" id="id-table">1</th>
+								<td id="name-table">Nausicaä of the Valley of the Wind</td>
+								<td id="year-table">1984</td>
 								<td>
 									<button
 										id="edit"
@@ -285,7 +287,7 @@
 														Cancel
 													</button>
 													<button
-														id="add-movie-save"
+														id="update-movie-save"
 														type="button"
 														class="btn btn-primary"
 														data-bs-dismiss="modal"
