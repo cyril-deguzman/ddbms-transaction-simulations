@@ -107,8 +107,10 @@ const IndexController = {
 
     db.startTransaction((result) => {
       db.query(query, (row) => {
-        db.rollback((result) => {
-          res.send(result);
+        db.sleep((result) => {
+          db.rollback((result) => {
+            res.send(result);
+          })
         })
       })
     })
@@ -135,8 +137,10 @@ const IndexController = {
 
     db.startTransaction((result) => {
       db.query(query, (row) => {
-        db.rollback((result) => {
-          res.send(result);
+        db.sleep((result) => {
+          db.rollback((result) => {
+            res.send(result);
+          })
         })
       })
     })

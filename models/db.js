@@ -61,6 +61,15 @@ const db = {
       console.log("Result: ", result);
       return callback(result);
     })
+  },
+
+  sleep: (callback) => {
+    const query = `SELECT sleep(2);`
+    this.connection.query(query, (err, result) => {
+      if (err) throw err;
+      console.log("Result: ", result);
+      return callback(result);
+    })
   }
 }
 
