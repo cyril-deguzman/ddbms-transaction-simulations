@@ -31,7 +31,14 @@ const IndexController = {
 
     db.query()
   },
-
+  
+  /**
+   * getMovie
+   * 
+   * searches a movie by name and returns if it matches a row.
+   * @param {*} req 
+   * @param {*} res 
+   */
   getMovie: (req, res) => {
     const {name} = req.query;
 
@@ -152,13 +159,22 @@ const IndexController = {
    * @param {*} res 
    */
   setIsolationLevel: (req, res) => {
-    const isoLvl = req.params.isolvl;
+    var isoLvl = req.params.isolvl;
+    
+    switch(isoLvl) {
+      case '1': isoLvl="Read Uncommitted"; break;
+      case '2': isoLvl="Read Commited"; break;
+      case '3': isoLvl="Repeatable Read"; break;
+      case '4': isoLvl="Serializable"; break;
+    }
 
     const query = `SET SESSION TRANSACTION ISOLATION LEVEL ${isoLvl}`;
 
     db.query(query, (result) => {
+      console.log(result);
+
       if(result) 
-        res.send('true')
+        res.render('index');
       else
         RecoveryController.debug()
     })
