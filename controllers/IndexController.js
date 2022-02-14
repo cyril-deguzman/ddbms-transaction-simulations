@@ -107,12 +107,14 @@ const IndexController = {
 
     db.startTransaction((result) => {
       db.query(query, (row) => {
-        db.commit((result) => {
-          if(row)
-            ReplicateController.delete(name, year);
-          else
-            RecoveryController.debug("delete", name, year);
-          res.send(result);
+        db.sleep((result) => {
+          db.commit((result) => {
+            if(row)
+              ReplicateController.delete(name, year);
+            else
+              RecoveryController.debug("delete", name, year);
+            res.send(result);
+          })
         })
       })
     })
@@ -139,12 +141,14 @@ const IndexController = {
 
     db.startTransaction((result) => {
       db.query(query, (row) => {
-        db.commit((result) => {
-          if(row)
-            ReplicateController.update(id, name, year);
-          else
-            RecoveryController.debug("update", name, year);
-          res.send(result);
+        db.sleep((result) => {
+          db.commit((result) => {
+            if(row)
+              ReplicateController.update(id, name, year);
+            else
+              RecoveryController.debug("update", name, year);
+            res.send(result);
+          })
         })
       })
     })

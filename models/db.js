@@ -54,8 +54,17 @@ const db = {
     })
   },
 
-  rollback: () => {
+  rollback: (callback) => {
     const query = `ROLLBACK;`
+    this.connection.query(query, (err, result) => {
+      if (err) throw err;
+      console.log("Result: ", result);
+      return callback(result);
+    })
+  },
+
+  sleep: (callback) => {
+    const query = `SELECT SLEEP(2);`
     this.connection.query(query, (err, result) => {
       if (err) throw err;
       console.log("Result: ", result);
