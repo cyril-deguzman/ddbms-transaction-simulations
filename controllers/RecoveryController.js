@@ -2,7 +2,8 @@ const db = require(`../models/db.js`)
 const db_left = require("../models/db_left");
 const db_right = require("../models/db_right");
 
-let status = arr => arr.every(Boolean);
+const status = arr => arr.every(Boolean);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const RecoveryController = {
   /**
@@ -21,7 +22,8 @@ const RecoveryController = {
    * @param {*} callback callback function for the IndexController to handle.
    * @returns 
    */
-  checkTable: (callback) => {
+  checkTable: async (callback) => {
+    await sleep(5000);
     const query = `SELECT * FROM recovery`
 
     let queriesAll = [];
@@ -37,7 +39,9 @@ const RecoveryController = {
           queriesAll = [...queriesAll, ...result]
           db_right.query(query, (result) => {
             queriesAll = [...queriesAll, ...result]
-            RecoveryController.recover(queriesAll, (msg) => {return callback(msg)})
+            RecoveryController.recover(queriesAll, (msg) => {
+              RecoveryController.truncate(()=>{return callback(msg)})
+            })
           })
         })
       })
@@ -66,7 +70,7 @@ const RecoveryController = {
         case '3': queriesRight.push(row.query); break;
       }
     }) 
-
+    
     for(i = 0; i < queriesCentral.length; i++) 
       db.query(queriesCentral[i], ()=>{console.log(i)});
     
@@ -76,8 +80,21 @@ const RecoveryController = {
     for(k = 0; k < queriesRight.length; k++) 
       db_right.query(queriesCentral[k], ()=>{console.log(k)});
     
+    await sleep(8000);
     return callback('recovery success');
   },
+
+  truncate: (callback) => {
+    const query = 'TRUNCATE TABLE recovery'
+
+    db.query(query, (result) => 
+      db_left.query(query, (result) => 
+        db_right.query(query, (result) => 
+          {return callback()}
+        )
+      )
+    )
+  }
 }
 
 module.exports = RecoveryController
