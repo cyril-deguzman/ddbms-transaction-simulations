@@ -23,39 +23,23 @@ const RecoveryController = {
    */
   checkTable: (callback) => {
     const query = `SELECT * FROM recovery`
-    let queriesAll = [];
-    let queriesCentral = [];
-    let queriesLeft = [];
-    let queriesRight = [];
 
+    let queriesAll = [];
     let centralState = db.checkConnection()
     let leftState = db_left.checkConnection()
     let rightState = db_right.checkConnection()
-
     let state = status([centralState, leftState, rightState])
 
     if(state) 
       db.query(query, (result) => {
         queriesAll = [...queriesAll, ...result]
-
         db_left.query(query, (result) => {
           queriesAll = [...queriesAll, ...result]
-
           db_right.query(query, (result) => {
             queriesAll = [...queriesAll, ...result]
-
-            queriesAll.forEach((row) => {
-              switch(row.node) {
-                case '1': queriesCentral.push(row.query); break;
-                case '2': queriesLeft.push(row.query); break;
-                case '3': queriesRight.push(row.query); break;
-              }
-            }) 
-
-            return callback(state);
+            RecoveryController.recover(queriesAll, (msg) => {return callback(msg)})
           })
         })
-        
       })
 
     else 
@@ -63,6 +47,37 @@ const RecoveryController = {
     
   },
 
+  /**
+   * recover
+   * 
+   * sorts all the queries passed via node and runs the queries on their corresponding nodes.
+   * @param {*} queries 
+   * @param {*} callback 
+   */
+  recover: async (queries, callback) => {
+    let queriesCentral = [];
+    let queriesLeft = [];
+    let queriesRight = [];
+
+    queries.forEach((row) => {
+      switch(row.node) {
+        case '1': queriesCentral.push(row.query); break;
+        case '2': queriesLeft.push(row.query); break;
+        case '3': queriesRight.push(row.query); break;
+      }
+    }) 
+
+    for(i = 0; i < queriesCentral.length; i++) 
+      db.query(queriesCentral[i], ()=>{console.log(i)});
+    
+    for(j = 0; j < queriesLeft.length; j++) 
+      db_left.query(queriesCentral[j], ()=>{console.log(j)});
+    
+    for(k = 0; k < queriesRight.length; k++) 
+      db_right.query(queriesCentral[k], ()=>{console.log(k)});
+    
+    return callback('recovery success');
+  },
 }
 
 module.exports = RecoveryController
