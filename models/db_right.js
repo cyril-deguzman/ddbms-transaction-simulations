@@ -2,6 +2,7 @@ const mysql = require('mysql');
 
 const db_right = {
   connection: null,
+  state: false,
 
   /* Connects to a locally hosted MYSQL database */
   connect: (url) => {
@@ -14,7 +15,8 @@ const db_right = {
 
     this.connection.connect(function(err){
       if(err) throw err;
-      console.log("connected to mysql central node uwu! ina mo ethel");
+      this.state = true;
+      console.log("connected to mysql central node uwu!");
     })
   },
 
@@ -25,8 +27,8 @@ const db_right = {
     })
   },
 
-  autoCommit: (callback) => {
-    const query = `SET autocommit = 0;`
+  autoCommit: (val, callback) => {
+    const query = `SET autocommit = ${val};`
     this.connection.query(query, (err, result) => {
       if (err) throw err;
       console.log("Result: ", result);
@@ -50,6 +52,15 @@ const db_right = {
       console.log("Result: ", result);
       return callback(result);
     })
+  },
+
+  close: (callback) => {
+    this.connection.end((err, result) => {
+      if(err) throw err;
+      console.log("connection: successfully closed left node");
+      this.state = false;
+      return callback(result);
+    });
   }
 }
 

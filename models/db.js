@@ -17,7 +17,7 @@ const db = {
       if(err) throw err;
       this.state = true;
       console.log("connected to mysql central node uwu!");
-      db.autoCommit((result) => {})
+      db.autoCommit(0, (result) => {})
     })
   },
 
@@ -29,8 +29,8 @@ const db = {
     })
   },
 
-  autoCommit: (callback) => {
-    const query = `SET autocommit = 0;`
+  autoCommit: (val, callback) => {
+    const query = `SET autocommit = ${val};`
     this.connection.query(query, (err, result) => {
       if (err) throw err;
       console.log("Result: ", result);
@@ -72,6 +72,15 @@ const db = {
       console.log("Result: ", result);
       return callback(result);
     })
+  },
+
+  close: (callback) => {
+    this.connection.end((err, result) => {
+      if(err) throw err;
+      console.log("connection: successfully closed left node");
+      this.state = false;
+      return callback(result);
+    });
   }
 }
 
