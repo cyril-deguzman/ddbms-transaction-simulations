@@ -26,7 +26,7 @@ const IndexController = {
    * @param {*} res 
    */
   getIndex: (req, res) => {
-    res.render('index')
+    res.render('index');
   },
   
   /**
@@ -40,19 +40,26 @@ const IndexController = {
     const {name} = req.query;
     const query = `SELECT * FROM movies ` +
                   "WHERE `name` = '" + name + "';"
-                  
-    db.startTransaction((result) => {
-      db.query(query, (err, row) => {
-        db.commit((result) => {
-          if(row)
-            res.send(result[0]);
-          else {
-            RecoveryController.debug("read", name, 0);
-            res.send(err);
-          }
+
+    RecoveryController.checkTable((result)=> {
+
+      console.log(result);
+
+      db.startTransaction((result) => {
+        db.query(query, (err, row) => {
+          db.commit((result) => {
+            if(row)
+              res.send(result[0]);
+            else {
+              RecoveryController.debug("read", name, 0);
+              res.send(err);
+            }
+          })
         })
       })
+
     })
+    
   },
 
   /**

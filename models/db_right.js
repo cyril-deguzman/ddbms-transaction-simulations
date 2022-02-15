@@ -9,7 +9,7 @@ const db_right = {
     this.connection = mysql.createConnection({
       host: url,
       user: "admin",
-      password: "password",
+      password: "advdb123",
       database: "mco2"
     })
 
@@ -21,9 +21,18 @@ const db_right = {
     })
   },
 
+  checkConnection: () => {
+    let isConnected = false;
+    if(this.connection.state == "authenticated")
+      isConnected = true;
+
+    return isConnected;
+  },
+
   query: (sql, callback) => {
     this.connection.query(sql, (err, result) => {
       if (err) throw err;
+      console.log("Result: ", result);
       return callback(result);
     })
   },

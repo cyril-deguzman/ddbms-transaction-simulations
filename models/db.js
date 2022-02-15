@@ -9,17 +9,24 @@ const db = {
     this.connection = mysql.createConnection({
       host: url,
       user: "admin",
-      password: "password",
+      password: "advdb123",
       database: "mco2"
     })
 
     this.connection.connect(function(err, result){
       if(err) console.log(err);
       this.state = true;
-      console.log("connected to mysql central node uwu!");
       db.autoCommit(0, (result) => console.log('central autocommit = 0;'))
       return callback(result);
     })
+  },
+
+  checkConnection: () => {
+    let isConnected = false;
+    if(this.connection.state == "authenticated")
+      isConnected = true;
+
+    return isConnected;
   },
 
   query: (sql, callback) => {
