@@ -80,7 +80,7 @@ $(document).ready(function () {
   /**
    * Delete Movie Button
    */
-   $('#delete-movie').click((e) => {
+  $('#delete-movie').click((e) => {
     e.preventDefault();
     const name = $('#update-name').val();
     const year = $('#update-year').val();
@@ -88,6 +88,75 @@ $(document).ready(function () {
     $.post('/delete', {
       name: name,
       year: year
+    }, (result) => {
+      console.log(result);
+    })
+  })
+
+  /**
+   * Toggle Central Button
+   */
+  $('#central-node').click(() => {
+    const button = $('#central-node');
+    let state = button.data('state');
+    let toggle = 1;
+
+    if(state) {
+      button.data('state', false);
+    }
+    else {
+      button.data('state', true);
+      toggle = 0;
+    }
+      
+    $.post('/central', {
+      toggle: toggle
+    }, (result) => {
+      console.log(result);
+    })
+  })
+
+  /**
+   * Toggle Left Button
+   */
+  $('#left-node').click(() => {
+    const button = $('#left-node');
+    let state = button.data('state');
+    let toggle = 1;
+
+    if(state) {
+      button.data('state', false);
+    }
+    else {
+      button.data('state', true);
+      toggle = 0;
+    }
+      
+    $.post('/left', {
+      toggle: toggle
+    }, (result) => {
+      console.log(result);
+    })
+  })
+
+  /**
+   * Toggle Right Button
+   */
+  $('#right-node').click(() => {
+    const button = $('#right-node');
+    let state = button.data('state');
+    let toggle = 1;
+
+    if(state) {
+      button.data('state', false);
+    }
+    else {
+      button.data('state', true);
+      toggle = 0;
+    }
+      
+    $.post('/right', {
+      toggle: toggle
     }, (result) => {
       console.log(result);
     })

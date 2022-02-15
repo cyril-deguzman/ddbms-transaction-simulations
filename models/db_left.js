@@ -5,7 +5,7 @@ const db_left = {
   state: false,
 
   /* Connects to a locally hosted MYSQL database */
-  connect: (url) => {
+  connect: (url, callback) => {
     this.connection = mysql.createConnection({
       host: url,
       user: "admin",
@@ -13,10 +13,11 @@ const db_left = {
       database: "mco2"
     })
 
-    this.connection.connect(function(err){
-      if(err) throw err;
+    this.connection.connect(function(err, result){
+      if(err) console.log(err);
       this.state = true;
-      console.log("connected to mysql central node uwu!");
+      console.log("connected to mysql left node uwu!");
+      return callback(result);
     })
   },
 

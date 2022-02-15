@@ -5,7 +5,7 @@ const db_right = {
   state: false,
 
   /* Connects to a locally hosted MYSQL database */
-  connect: (url) => {
+  connect: (url, callback) => {
     this.connection = mysql.createConnection({
       host: url,
       user: "admin",
@@ -13,10 +13,11 @@ const db_right = {
       database: "mco2"
     })
 
-    this.connection.connect(function(err){
-      if(err) throw err;
+    this.connection.connect(function(err, result){
+      if(err) console.log(err);
       this.state = true;
-      console.log("connected to mysql central node uwu!");
+      console.log("connected to mysql right node uwu!");
+      return callback(result);
     })
   },
 
@@ -57,7 +58,7 @@ const db_right = {
   close: (callback) => {
     this.connection.end((err, result) => {
       if(err) throw err;
-      console.log("connection: successfully closed left node");
+      console.log("connection: successfully closed right node");
       this.state = false;
       return callback(result);
     });

@@ -25,9 +25,9 @@ url_right = process.env.DB_RIGHT;
 
 app.use(express.static(`public`));
 
-db.connect(url);
-db_left.connect(url_left);
-db_right.connect(url_right);
+db.connect(url, ()=>{});
+db_left.connect(url_left, ()=>{});
+db_right.connect(url_right, ()=>{});
 
 app.use(`/`, routes);
 

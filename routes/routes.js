@@ -11,4 +11,7 @@ app.post(`/isolation`, IndexController.setIsolationLevel);
 app.post(`/add`, IndexController.postAddMovie);
 app.post(`/delete`, IndexController.postDeleteMovie);
 app.post(`/update`, IndexController.postUpdateMovie);
+app.post(`/central`, IndexController.postToggleCentral);
+app.post(`/left`, IndexController.postToggleLeft);
+app.post(`/right`, IndexController.postToggleRight);
 module.exports = app

@@ -1,6 +1,20 @@
+/* import dependencies */
+const dotenv = require(`dotenv`)
+
+/* import databases */
 const db = require(`../models/db.js`)
+const db_left = require("../models/db_left");
+const db_right = require("../models/db_right");
+
+/* import auxiliary controllers */
 const ReplicateController = require(`./ReplicateController.js`)
 const RecoveryController = require(`./RecoveryController.js`)
+
+/* process env files */
+dotenv.config('../.env');
+const url = process.env.DB_URL;
+const url_left = process.env.DB_LEFT;
+const url_right = process.env.DB_RIGHT;
 
 const IndexController = {
 
@@ -26,7 +40,7 @@ const IndexController = {
     const {name} = req.query;
     const query = `SELECT * FROM movies ` +
                   "WHERE `name` = '" + name + "';"
-
+                  
     db.startTransaction((result) => {
       db.query(query, (err, row) => {
         db.commit((result) => {
@@ -156,7 +170,7 @@ const IndexController = {
 
     const query = `SET SESSION TRANSACTION ISOLATION LEVEL ${isoLvl}`;
     console.log(query);
-    
+
     db.query(query, (result) => {
       if(result) 
         res.render('index');
@@ -182,6 +196,61 @@ const IndexController = {
         RecoveryController.debug()
     })
   },
+
+  /**
+   * postToggleCentral
+   * 
+   * toggles connection with the central node
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postToggleCentral: (req, res) => {
+    const toggle = req.body.toggle;
+    
+    if(toggle == '1')
+      db.connect(url, ()=>{
+        res.send("reconnected to central node");
+      })
+    else 
+      db.close(()=>{})
+  },
+
+  /**
+   * postToggleLeft
+   * 
+   * toggles connection with the left node
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postToggleLeft: (req, res) => {
+    const toggle = req.body.toggle;
+
+    if(toggle == '1')
+      db_left.connect(url_left, () => {
+        console.log('debug toggle');
+        res.send("reconnected to left node");
+      })
+    else 
+      db_left.close(()=>{})
+  },
+
+  /**
+   * postToggleRight
+   * 
+   * toggles connection with the right node
+   * @param {*} req 
+   * @param {*} res 
+   */
+  postToggleRight: (req, res) => {
+    const toggle = req.body.toggle;
+
+    if(toggle == '1')
+      db_right.connect(url_right, () => {
+        res.send("reconnected to right node");
+      })
+    else 
+      db_right.close(()=>{})
+  }
 }
 
 module.exports = IndexController
