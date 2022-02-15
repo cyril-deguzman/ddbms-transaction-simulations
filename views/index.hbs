@@ -51,8 +51,8 @@
 					</div>
 				</div>
 
-				<!-- Select isolation level -->
-				<div class="direction-row">
+				<div>
+					<!-- Select isolation level -->
 					<form>
 						<label for="isolation-type" class="form-label">Isolation Level</label>
 						<select
@@ -74,10 +74,12 @@
 							<i class="fa-solid fa-check"></i>
 						</button>
 					</form>
-					<div>
-						<button id="central-node" type="button" class="btn btn-primary btn-sm">Central Node</button>
-						<button id="left-node" type="button" class="btn btn-primary btn-sm">Left Node </button>
-						<button id="right-node" type="button" class="btn btn-primary btn-sm">Right Node </button>
+
+					<!-- Enable/Disable nodes -->
+					<div id="node-btns">
+						<button id="central-node" type="button" class="btn btn-primary btn-sm" data-bs-toggle="button" autocomplete="off">Central Node</button>
+						<button id="left-node" type="button" class="btn btn-primary btn-sm" data-bs-toggle="button" autocomplete="off">Left Node</button>
+						<button id="right-node" type="button" class="btn btn-primary btn-sm" data-bs-toggle="button" autocomplete="off">Right Node</button>
 					</div>
 				</div>
 			</div>
