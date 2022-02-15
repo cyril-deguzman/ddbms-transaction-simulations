@@ -6,7 +6,11 @@ $(document).ready(function () {
   $('#set-isolation-type').click(() => {
     let option = $('#isolation-type :selected').val();
     
-    window.location = `/isolation/${option}`
+    $.post('/isolation', {
+      isolvl: option
+    }, (result) => {
+      console.log(result);
+    })
   })
 
   /**
@@ -14,7 +18,6 @@ $(document).ready(function () {
    */
   $('#search-btn').click((e) => {
     e.preventDefault();
-    console.log('here');
     const query = $('#search-input');
 
     const id = $('#id-table');

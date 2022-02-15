@@ -14,23 +14,6 @@ const IndexController = {
   getIndex: (req, res) => {
     res.render('index')
   },
-
-  /**
-   * getQuery
-   * 
-   * universal query function
-   * @param {*} req 
-   * @param {*} res 
-   */
-  getQuery: (req, res) => {
-    const query = ` ` +
-                  ` ` +
-                  ` ` +
-                  ` ` +
-                  ` `
-
-    db.query()
-  },
   
   /**
    * getMovie
@@ -41,7 +24,6 @@ const IndexController = {
    */
   getMovie: (req, res) => {
     const {name} = req.query;
-    console.log(name);
     const query = `SELECT * FROM movies ` +
                   "WHERE `name` = '" + name + "';"
 
@@ -163,7 +145,7 @@ const IndexController = {
    * @param {*} res 
    */
   setIsolationLevel: (req, res) => {
-    var isoLvl = req.params.isolvl;
+    var isoLvl = req.body.isolvl;
     
     switch(isoLvl) {
       case '1': isoLvl="Read Uncommitted"; break;
@@ -173,10 +155,9 @@ const IndexController = {
     }
 
     const query = `SET SESSION TRANSACTION ISOLATION LEVEL ${isoLvl}`;
-
+    console.log(query);
+    
     db.query(query, (result) => {
-      console.log(result);
-
       if(result) 
         res.render('index');
       else

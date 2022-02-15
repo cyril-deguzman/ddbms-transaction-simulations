@@ -2,6 +2,7 @@ const mysql = require('mysql');
 
 const db = {
   connection: null,
+  state: false,
 
   /* Connects to a locally hosted MYSQL database */
   connect: (url) => {
@@ -14,7 +15,8 @@ const db = {
 
     this.connection.connect(function(err){
       if(err) throw err;
-      console.log("connected to mysql central node uwu! ina mo ethel");
+      this.state = true;
+      console.log("connected to mysql central node uwu!");
       db.autoCommit((result) => {})
     })
   },
