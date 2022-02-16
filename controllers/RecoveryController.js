@@ -23,7 +23,7 @@ const RecoveryController = {
    * @returns 
    */
   checkTable: async (callback) => {
-    await sleep(5000);
+    await sleep(3000);
     const query = `SELECT * FROM recovery`
 
     let queriesAll = [];
@@ -39,8 +39,12 @@ const RecoveryController = {
           queriesAll = [...queriesAll, ...result]
           db_right.query(query, (result) => {
             queriesAll = [...queriesAll, ...result]
-            RecoveryController.recover(queriesAll, (msg) => {
-              RecoveryController.truncate(()=>{return callback(msg)})
+
+            if(queriesAll.length == 0)
+              return callback('all in sync');
+            else 
+              RecoveryController.recover(queriesAll, (msg) => {
+                RecoveryController.truncate(()=>{return callback(msg)})
             })
           })
         })
@@ -71,19 +75,34 @@ const RecoveryController = {
       }
     }) 
     
-    for(i = 0; i < queriesCentral.length; i++) 
-      db.query(queriesCentral[i], ()=>{console.log(i)});
-    
-    for(j = 0; j < queriesLeft.length; j++) 
-      db_left.query(queriesCentral[j], ()=>{console.log(j)});
-    
-    for(k = 0; k < queriesRight.length; k++) 
-      db_right.query(queriesCentral[k], ()=>{console.log(k)});
-    
-    await sleep(8000);
+    for(i = 0; i < queriesCentral.length; i++)  {
+      db.query(queriesCentral[i], ()=>{});
+      console.log('recover 1: ' + i)
+      await sleep(7000);
+    }
+      
+    for(j = 0; j < queriesLeft.length; j++) {
+      db_left.query(queriesLeft[j], ()=>{});
+      console.log('recover 2: ' + j)
+      await sleep(5000);
+    }
+      
+    for(k = 0; k < queriesRight.length; k++) {
+      db_right.query(queriesRight[k], ()=>{});
+      console.log('recover 3: ' + k)
+      await sleep(5000);
+    }
+      
+    await sleep(5000);
     return callback('recovery success');
   },
 
+  /**
+   * truncate
+   * 
+   * truncates all the queries stored in the recovery table upon executing all queries inside.
+   * @param {*} callback 
+   */
   truncate: (callback) => {
     const query = 'TRUNCATE TABLE recovery'
 

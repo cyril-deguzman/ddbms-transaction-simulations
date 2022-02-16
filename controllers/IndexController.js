@@ -41,25 +41,19 @@ const IndexController = {
     const query = `SELECT * FROM movies ` +
                   "WHERE `name` = '" + name + "';"
 
-    RecoveryController.checkTable((result)=> {
-
-      console.log(result);
-
-      db.startTransaction((result) => {
-        db.query(query, (err, row) => {
-          db.commit((result) => {
-            if(row)
-              res.send(result[0]);
-            else {
-              RecoveryController.debug("read", name, 0);
-              res.send(err);
-            }
-          })
+    db.startTransaction((result) => {
+      db.query(query, (err, row) => {
+        db.commit((result) => {
+          if(row)
+            res.send(result[0]);
+          else {
+            RecoveryController.debug("read", name, 0);
+            res.send(err);
+          }
         })
       })
-
     })
-    
+
   },
 
   /**

@@ -5,7 +5,7 @@ const db = {
   state: false,
 
   /* Connects to a locally hosted MYSQL database */
-  connect: (url, callback) => {
+  connect: async (url, callback) => {
     this.connection = mysql.createConnection({
       host: url,
       user: "admin",
@@ -16,7 +16,8 @@ const db = {
     this.connection.connect(function(err, result){
       if(err) console.log(err);
       this.state = true;
-      db.autoCommit(0, (result) => console.log('central autocommit = 0;'))
+      db.autoCommit(1, (result) => console.log('central autocommit = 1'))
+      
       return callback(result);
     })
   },
