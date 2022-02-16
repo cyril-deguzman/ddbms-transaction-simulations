@@ -70,6 +70,26 @@ const ReplicateController = {
     db.query(query, (row) => {
       return callback(row[0].id)
     })
+  },
+
+  /**
+   * getID
+   * 
+   * gets latest id from left and right node
+   * @param {*} callback callback function
+   */
+   getIDLeftAndRight: (callback) => {
+    const query = `SELECT MAX(id) as id FROM mco2.movies;`
+
+    db_left.query(query, (id_left) => {
+      db_right.query(query, (id_right) => {
+        if(id_left[0].id > id_right[0].id)
+          return callback(id_left[0].id)
+        else
+          return callback(id_right[0].id)
+      })
+    })
+    
   }
 }
 

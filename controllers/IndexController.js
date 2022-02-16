@@ -72,18 +72,37 @@ const IndexController = {
     const query = "INSERT INTO movies (`name`, `year`) " +
                   `VALUES ("${name}", ${year}); `
 
-    db.startTransaction((result) => {
-      db.query(query, (row) => {
-        db.commit((result) => {
-          if(row)
-            ReplicateController.replicate(name, year);
-          else
-            RecoveryController.debug("insert", name, year);
-          res.send(result);
-        })
-      })
-    })
+      if(db.checkConnection()){
+        ReplicateController.getIDLeftAndRight((id) => {
+          const queryRecovery = "INSERT INTO movies (id, `name`, `year`) " +
+                                `VALUES (${id},"${name}", ${year}); `
+          let dbc = db_right;
+          if(year < 1980)
+            dbc = db_left;
+         
+          dbc.query(queryRecovery, () => {
+            const queryRecovery = "INSERT INTO recovery (`query`, node) " + 
+                                  'VALUES ("INSERT INTO movies (id, `name`, `year`) VALUES (' + id + ', `' + name + '` , `' + year + '`)", 1);'
+            db_left.query(queryRecovery, () => {
+              res.send("added movie and saved to recovery");
+            })                
+          })     
+        });
+      }
 
+      else{
+        db.startTransaction((result) =>{
+          db.query(query, (row) => {
+            db.commit((result) => {
+              if(row)
+                ReplicateController.replicate(name, year);
+              else
+                RecoveryController.debug("insert", name, year);
+              res.send(result);
+            })
+          })
+        })
+      }  
   },
 
   /**
@@ -210,7 +229,10 @@ const IndexController = {
     
     if(toggle == '1')
       db.connect(url, ()=>{
-        res.send("reconnected to central node");
+        RecoveryController.checkTable(()=>{
+          res.send("recovered and reconnected to central node");
+        })
+        
       })
     else 
       db.close(()=>{})

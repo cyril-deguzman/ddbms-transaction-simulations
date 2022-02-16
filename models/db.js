@@ -26,7 +26,7 @@ const db = {
     let isConnected = false;
     if(this.connection.state == "authenticated")
       isConnected = true;
-
+    console.log(isConnected);
     return isConnected;
   },
 
