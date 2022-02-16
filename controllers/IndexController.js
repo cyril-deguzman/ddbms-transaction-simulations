@@ -71,9 +71,10 @@ const IndexController = {
 
     const query = "INSERT INTO movies (`name`, `year`) " +
                   `VALUES ("${name}", ${year}); `
-
-      if(db.checkConnection()){
+    
+      if(!db.checkConnection()){
         ReplicateController.getIDLeftAndRight((id) => {
+          id += 1;
           const queryRecovery = "INSERT INTO movies (id, `name`, `year`) " +
                                 `VALUES (${id},"${name}", ${year}); `
           let dbc = db_right;
@@ -82,7 +83,7 @@ const IndexController = {
          
           dbc.query(queryRecovery, () => {
             const queryRecovery = "INSERT INTO recovery (`query`, node) " + 
-                                  'VALUES ("INSERT INTO movies (id, `name`, `year`) VALUES (' + id + ', `' + name + '` , `' + year + '`)", 1);'
+                                  'VALUES ("INSERT INTO movies (id, `name`, `year`) VALUES (' + id + ', \'' + name + '\' , \'' + year + '\')", 1);'
             db_left.query(queryRecovery, () => {
               res.send("added movie and saved to recovery");
             })                
@@ -232,7 +233,6 @@ const IndexController = {
         RecoveryController.checkTable(()=>{
           res.send("recovered and reconnected to central node");
         })
-        
       })
     else 
       db.close(()=>{})
